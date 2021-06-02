@@ -1,0 +1,14 @@
+code: customerportal-content-bundle
+description: This is the Customer Portal content bundle
+bundle-type: system-level-bundle
+components:
+  pageModels:
+    - pageModels/cp-internal-page-descriptor.yaml
+    - pageModels/cp-silent-check-sso-page-descriptor.yaml
+  fragments:
+    - fragments/cp_keycloak_auth-descriptor.yaml
+    - fragments/cp_keycloak_auth_with_redirect-descriptor.yaml
+  pages:
+    - pages/customer_portal-descriptor.yaml
+    - pages/cp_admin_config-descriptor.yaml
+    - pages/cp_keycloak_silent_check_sso-descriptor.yaml
