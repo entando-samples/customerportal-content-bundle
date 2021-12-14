@@ -2,7 +2,11 @@
 <script nonce="<@wp.cspNonce />">
     (function () {
         const consolePrefix = '[ENTANDO-KEYCLOAK]';
-        const keycloakConfigEndpoint = '<@wp.info key="systemParam" paramName="applicationBaseURL" />keycloak.json';
+        let keycloakConfigEndpoint = '<@wp.info key="systemParam" paramName="applicationBaseURL" />keycloak.json';
+        //Note: shouldn't be necessary but needed on entando.com to match protocol.
+        if (window.location.origin.startsWith('https://')) {
+            keycloakConfigEndpoint = keycloakConfigEndpoint.replace('http://', 'https://');
+        }
         let keycloakConfig;
 
         function dispatchKeycloakEvent(eventType) {
@@ -32,15 +36,15 @@
             };
             keycloak.onTokenExpired = function () {
                 dispatchKeycloakEvent('onTokenExpired');
+                //Refresh the token while the page is open
+                keycloak.updateToken();
             };
             window.entando = {
                 ...(window.entando || {}),
                 keycloak,
             };
-            const silentRedirectUri = window.location.origin + '/en/cp_keycloak_silent_check_sso.page';
             const initOptions = {
                 onLoad: 'login-required',
-                silentCheckSsoRedirectUri: silentRedirectUri,
                 enableLogging: true
             };
             window.entando.keycloak
